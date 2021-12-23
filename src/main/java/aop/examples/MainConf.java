@@ -27,23 +27,6 @@ public class MainConf {
     }
 
 
-    @IdiCache
-    public String getPassword(String userName) {
-
-    }
-
-    @IdiCache
-    public Person getPerson(int id) {
-        //20 lines of code which bring person from database
-        return null;
-    }
-
-
-
-
-
-
-
 
 
 }
