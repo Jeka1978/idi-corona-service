@@ -12,6 +12,10 @@ public class IdiCoronaServiceApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(IdiCoronaServiceApplication.class, args);
         System.out.println();
+        CoronaHospital hospital = context.getBean(CoronaHospital.class);
+        hospital.treat();
+        hospital.changeToNextMutation();
+        hospital.treat();
     }
 
 }

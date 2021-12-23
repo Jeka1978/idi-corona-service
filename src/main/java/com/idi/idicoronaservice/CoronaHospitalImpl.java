@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 /**
  * @author Evgeny Borisov
  */
@@ -12,8 +14,8 @@ import java.util.List;
 public class CoronaHospitalImpl implements CoronaHospital {
 
 
-    @Autowired
-    private List<CoronaDoctor> coronaDoctors;
+    @Autowired(required = false)
+    private List<CoronaDoctor> coronaDoctors = asList(() -> System.out.println("take asprin"));
 
     private int index;
 
