@@ -1,40 +1,41 @@
 package aop.examples.aop;
 
 import aop.examples.validators.IdiException;
-import lombok.SneakyThrows;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.ref.WeakReference;
-import java.util.*;
-
-import static java.util.Arrays.asList;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * @author Evgeny Borisov
  */
-@Component
-@Aspect
-public class ExceptionHandlerAspect {
 
+public class ExceptionHandlerAspect implements MethodInterceptor {
 
+    @Autowired
+    private ExceptionDistributor exceptionDistributor;
 
-    private List<String> mails;
+    private Map<IdiException, Void> exceptions = new WeakHashMap<>();
 
-    private Map<IdiException,Void> exceptions = new WeakHashMap<>();
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        try {
+            return invocation.proceed();
+        } catch (IdiException ex) {
+            if (!exceptions.containsKey(ex)) {
+                exceptionDistributor.deliverException(ex);
+                exceptions.put(ex, null);
+            }
+            throw ex;
+        }
 
-
-    @Value("${dba.mails}")
-    public void setMails(String[] mails) {
-        this.mails = asList(mails);
     }
 
 
-    @AfterThrowing(pointcut = "execution(* aop.examples..*.*(..))",throwing = "ex")
+
+    /*@AfterThrowing(pointcut = "execution(* com.idi..*.*(..))",throwing = "ex")
     public void handleIdiExceptions(IdiException ex) {
         if (!exceptions.containsKey(ex)) {
             for (String mail : mails) {
@@ -43,7 +44,7 @@ public class ExceptionHandlerAspect {
             exceptions.put(ex,null);
 
         }
-    }
+    }*/
 
 
 

@@ -1,5 +1,7 @@
 package aop.examples;
 
+import aop.examples.aop.CustomPointcut;
+import aop.examples.aop.ExceptionHandlerAspect;
 import aop.examples.services.StartService;
 import org.springframework.context.annotation.*;
 
@@ -10,7 +12,13 @@ import org.springframework.context.annotation.*;
 @ComponentScan
 //@ImportResource("classpath:aop.xml")
 @EnableAspectJAutoProxy
+@PropertySource("classpath:application.properties")
 public class MainConf {
+
+
+
+
+
 
     public static void main(String[] args) {
 
